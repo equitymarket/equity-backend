@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SQL XML created by WWW SQL Designer, https://github.com/ondras/wwwsqldesigner/ -->
+<!-- Active URL: http://ondras.zarovi.cz/sql/demo/ -->
+<sql>
+<datatypes db="mysql">
+	<group label="Numeric" color="rgb(238,238,170)">
+		<type label="Integer" length="0" sql="INTEGER" quote=""/>
+	 	<type label="TINYINT" length="0" sql="TINYINT" quote=""/>
+	 	<type label="SMALLINT" length="0" sql="SMALLINT" quote=""/>
+	 	<type label="MEDIUMINT" length="0" sql="MEDIUMINT" quote=""/>
+	 	<type label="INT" length="0" sql="INT" quote=""/>
+		<type label="BIGINT" length="0" sql="BIGINT" quote=""/>
+		<type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
+		<type label="Single precision" length="0" sql="FLOAT" quote=""/>
+		<type label="Double precision" length="0" sql="DOUBLE" re="DOUBLE" quote=""/>
+	</group>
+
+	<group label="Character" color="rgb(255,200,200)">
+		<type label="Char" length="1" sql="CHAR" quote="'"/>
+		<type label="Varchar" length="1" sql="VARCHAR" quote="'"/>
+		<type label="Text" length="0" sql="MEDIUMTEXT" re="TEXT" quote="'"/>
+		<type label="Binary" length="1" sql="BINARY" quote="'"/>
+		<type label="Varbinary" length="1" sql="VARBINARY" quote="'"/>
+		<type label="BLOB" length="0" sql="BLOB" re="BLOB" quote="'"/>
+	</group>
+
+	<group label="Date &amp; Time" color="rgb(200,255,200)">
+		<type label="Date" length="0" sql="DATE" quote="'"/>
+		<type label="Time" length="0" sql="TIME" quote="'"/>
+		<type label="Datetime" length="0" sql="DATETIME" quote="'"/>
+		<type label="Year" length="0" sql="YEAR" quote=""/>
+		<type label="Timestamp" length="0" sql="TIMESTAMP" quote="'"/>
+	</group>
+
+	<group label="Miscellaneous" color="rgb(200,200,255)">
+		<type label="ENUM" length="1" sql="ENUM" quote=""/>
+		<type label="SET" length="1" sql="SET" quote=""/>
+		<type label="Bit" length="0" sql="bit" quote=""/>
+	</group>
+</datatypes><table x="466" y="169" name="User">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<default>NULL</default></row>
+<row name="password" null="1" autoincrement="0">
+<datatype>CHAR(50)</datatype>
+<default>NULL</default></row>
+<row name="mobile" null="1" autoincrement="0">
+<datatype>CHAR(20)</datatype>
+<default>NULL</default></row>
+<row name="wechat" null="1" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<default>NULL</default><comment>΢хۅ</comment>
+</row>
+<row name="alipay" null="1" autoincrement="0">
+<datatype>CHAR(50)</datatype>
+<default>NULL</default><comment>֧ضѦ</comment>
+</row>
+<row name="rank" null="0" autoincrement="0">
+<datatype>INTEGER(3)</datatype>
+<default>1</default><comment>用户级别</comment>
+</row>
+<row name="points" null="0" autoincrement="0">
+<datatype>INTEGER(20)</datatype>
+<default>0</default><comment>积分</comment>
+</row>
+<row name="invitecode" null="1" autoincrement="0">
+<datatype>CHAR(20)</datatype>
+<default>NULL</default><comment>邀请码</comment>
+</row>
+<row name="role_id" null="0" autoincrement="0">
+<datatype>INTEGER(3)</datatype>
+<default>NULL</default><relation table="Role" row="id" />
+<comment>角色id</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>用户</comment>
+</table>
+<table x="889" y="114" name="Buyrecord">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="id_User" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="User" row="id" />
+</row>
+<row name="id_Stratedy" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Stratedy" row="id" />
+</row>
+<row name="status" null="0" autoincrement="0">
+<datatype>INTEGER(5)</datatype>
+<default>1</default><comment>购买状态 已经购买  已订阅</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>用户购买策略记录</comment>
+</table>
+<table x="649" y="15" name="Mytrade">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="id_User" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="User" row="id" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>用户交易记录</comment>
+</table>
+<table x="1023" y="238" name="Trade">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="id_Stratedy" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="Stratedy" row="id" />
+</row>
+<row name="code" null="0" autoincrement="0">
+<datatype>INTEGER(10)</datatype>
+<comment>股票代码</comment>
+</row>
+<row name="direction" null="1" autoincrement="0">
+<datatype>INTEGER(3)</datatype>
+<default>1</default><comment>交易方向</comment>
+</row>
+<row name="created" null="1" autoincrement="0">
+<datatype>DATE</datatype>
+<default>NULL</default><comment>Դݨʱݤ</comment>
+</row>
+<row name="price" null="0" autoincrement="0">
+<datatype>DECIMAL(100)</datatype>
+<default>0</default><comment>成交价</comment>
+</row>
+<row name="volume" null="0" autoincrement="0">
+<datatype>INTEGER(1000)</datatype>
+<default>100</default><comment>成交量</comment>
+</row>
+<row name="dealtype" null="0" autoincrement="0">
+<datatype>INTEGER</datatype>
+<relation table="Dealtype" row="id" />
+<comment>交易类型</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>策略交易记录</comment>
+</table>
+<table x="1359" y="96" name="History">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>股票历史价格数据</comment>
+</table>
+<table x="328" y="462" name="Role">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<default>NULL</default><comment>角色名称</comment>
+</row>
+<row name="mobile" null="1" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<default>NULL</default></row>
+<row name="password" null="0" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<default>'NULL'</default><comment>Ĝë</comment>
+</row>
+<key type="UNIQUE" name="">
+<part>id</part>
+<part>mobile</part>
+</key>
+<comment>角色表</comment>
+</table>
+<table x="640" y="257" name="Stratedy">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="0" autoincrement="0">
+<datatype>CHAR(50)</datatype>
+<comment>策略名称</comment>
+</row>
+<row name="price" null="0" autoincrement="0">
+<datatype>DECIMAL(20)</datatype>
+<default>0</default><comment>策略价格</comment>
+</row>
+<row name="pricipal" null="0" autoincrement="0">
+<datatype>DECIMAL(100)</datatype>
+<default>1000000</default><comment>本金</comment>
+</row>
+<row name="created" null="0" autoincrement="0">
+<datatype>DATE</datatype>
+<comment>Դݨɕǚ</comment>
+</row>
+<row name="updated" null="1" autoincrement="0">
+<datatype>DATE</datatype>
+<default>NULL</default><comment>ټтɕǚ</comment>
+</row>
+<row name="level" null="0" autoincrement="0">
+<datatype>INTEGER(3)</datatype>
+<default>1</default><comment>策略级别</comment>
+</row>
+<row name="subscription" null="0" autoincrement="0">
+<datatype>INTEGER(30)</datatype>
+<default>0</default><comment>订阅数量</comment>
+</row>
+<row name="purchase" null="0" autoincrement="0">
+<datatype>INTEGER(30)</datatype>
+<default>0</default><comment>购买量</comment>
+</row>
+<row name="maxwithdraw" null="0" autoincrement="0">
+<datatype>DECIMAL(10)</datatype>
+<default>0</default><comment>最大回撤</comment>
+</row>
+<row name="totalreturn" null="0" autoincrement="0">
+<datatype>DECIMAL(10)</datatype>
+<default>0</default><comment>累计收益</comment>
+</row>
+<row name="todayreturn" null="0" autoincrement="0">
+<datatype>DECIMAL(10)</datatype>
+<default>0</default><comment>今日收益</comment>
+</row>
+<row name="classification" null="0" autoincrement="0">
+<datatype>INTEGER(3)</datatype>
+<default>1</default><relation table="Stratedy_classification" row="id" />
+<comment>策略类别</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>交易策略表</comment>
+</table>
+<table x="438" y="599" name="Permission">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="0" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<comment>权限名称</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>权限表</comment>
+</table>
+<table x="801" y="584" name="Stratedy_classification">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<default>NULL</default><comment>ӟÔ`эúܹѾĦ/ܼ˵Ħ/הԥ</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>策略分类  基本面 技术面 对冲</comment>
+</table>
+<table x="1167" y="28" name="Stock">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="0" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<comment>股票名称</comment>
+</row>
+<row name="code" null="0" autoincrement="0">
+<datatype>CHAR(10)</datatype>
+<comment>股票代码</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>股票列表</comment>
+</table>
+<table x="1222" y="446" name="Dealtype">
+<row name="id" null="1" autoincrement="1">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>CHAR(30)</datatype>
+<default>NULL</default><comment>ԉݻ`э</comment>
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
+</key>
+<comment>成交类型  市价成交 等等</comment>
+</table>
+</sql>
