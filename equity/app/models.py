@@ -1,18 +1,51 @@
+# -*- coding:utf-8 -*-
+
+import hashlib
+from rest_framework import serializers
+
 from django.db import models
 
 
 # Create your models here.
 class User(models.Model):
     """用户表"""
-    name = models.CharField(max_length=30, default=None)
-    password = models.CharField(max_length=30, default=None)
-    mobile = models.CharField(max_length=30, default=None)
-    wechat = models.CharField(max_length=30, default=None)
-    alipay = models.CharField(max_length=30, default=None)
+    name = models.CharField(max_length=30)
+    password = models.CharField(max_length=30)
+    mobile = models.CharField(max_length=30)
+    wechat = models.CharField(max_length=30, null=True, default=None)
+    alipay = models.CharField(max_length=30, null=True)
     rank = models.IntegerField(default=1)  # 用户等级 1-普通用户
     points = models.IntegerField(default=0)  # 积分
-    invitecode = models.CharField(max_length=30, default=None)
-    role = models.ForeignKey(to='Role')
+    invitecode = models.CharField(max_length=30, null=True)
+    role = models.ForeignKey(to='Role', default=1)
+    openid = models.CharField(max_length=100, null=True)
+    unionid = models.CharField(max_length=100, null=True)  # 跨公众号的unionid
+    officialaccount = models.IntegerField(default=1)  # 公众号编码 不排除创建多个公众号
+    refresh_token = models.CharField(max_length=512, null=True)  # 刷新的token
+
+    def __str__(self):
+        return self.name
+
+    def is_authenticated(self):
+        return True
+
+    def hashed_password(self, password=None):
+        if not password:
+            return self.password
+        else:
+            return hashlib.md5(password).hexdigest()
+
+    def check_password(self, password):
+        if self.hashed_password(password) == self.password:
+            return True
+        return False
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('name', 'password', 'mobile', 'wechat', 'alipay', 'rank', 'points', 'invitecode', 'role',
+                  'openid', 'unionid', 'officialaccount', 'refresh_token')
 
 
 class Role(models.Model):
@@ -20,15 +53,36 @@ class Role(models.Model):
     name = models.CharField(max_length=30, unique=True)
     permission = models.ManyToManyField(to='Permission')
 
+    def __str__(self):
+        return self.name
+
 
 class Permission(models.Model):
     """权限表"""
-    pass
+    name = models.CharField(max_length=30, unique=True, default=None)
+
+    def __str__(self):
+        return self.name
+
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ('id', 'name')
 
 
 class Mytrade(models.Model):
     """用户自主交易记录表"""
-    id_user = models.ForeignKey(to='User')
+    user = models.ForeignKey(to='User')
+    code = models.CharField(max_length=10, null=True)  # 股票代码
+    direction = models.IntegerField(default=1)  # 交易方向 1-买入 2-卖出
+    created = models.DateField(auto_now_add=True)  # 创建时间
+    price = models.DecimalField(max_digits=10, decimal_places=3, null=True)  # 成交价
+    volume = models.DecimalField(max_digits=10, decimal_places=3, null=True)  # 成交量
+    dealtype = models.ForeignKey(to='DealType', default=1)  # 交易类型
+
+    def __str__(self):
+        return self.code
 
 
 class Stratedy(models.Model):
@@ -36,8 +90,8 @@ class Stratedy(models.Model):
     name = models.CharField(max_length=30, unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=3)
     pricipal = models.DecimalField(max_digits=10, decimal_places=3)  # 本金
-    created = models.DateField(auto_now=True)  # 创建时间
-    updated = models.DateField(auto_now=True)  # 更新时间
+    created = models.DateField(auto_now_add=True)  # 创建时间
+    updated = models.DateField(auto_now_add=True)  # 更新时间
     level = models.IntegerField(default=1)  # 1-初级免费 2-中级  。。。 待完善
     subscription = models.IntegerField(default=0)  # 订阅量
     purchase = models.IntegerField(default=0)  # 购买量
@@ -53,7 +107,7 @@ class BuyRecord(models.Model):
     user = models.ForeignKey(to=User)
     stratedy = models.ForeignKey(to=Stratedy)
     status = models.IntegerField(default=1)  # 购买状态 1-已购买 2-已加入购物车
-    created = models.DateField(auto_now=True)  # 创建时间
+    created = models.DateField(auto_now_add=True)  # 创建时间
 
 
 class StratedyClassification(models.Model):
@@ -66,7 +120,7 @@ class Trade(models.Model):
     id_Stratedy = models.ForeignKey(to='Stratedy')
     code = models.CharField(max_length=10)  # 股票代码
     direction = models.IntegerField()  # 交易方向
-    created = models.DateField(auto_now=True)  # 创建时间
+    created = models.DateField(auto_now_add=True)  # 创建时间
     price = models.DecimalField(max_digits=10, decimal_places=3)  # 成交价
     volume = models.DecimalField(max_digits=10, decimal_places=3)  # 成交量
     dealtype = models.ForeignKey(to='DealType')  # 交易类型
