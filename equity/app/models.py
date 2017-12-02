@@ -114,6 +114,9 @@ class StratedyClassification(models.Model):
     """策略分类表"""
     name = models.CharField(max_length=30, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Trade(models.Model):
     """策略交易历史记录"""

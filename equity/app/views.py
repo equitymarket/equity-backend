@@ -75,3 +75,9 @@ def users_list(request):
     users = User.objects.all()
     l = UserSerializer(User.objects.all(), many=True)
     return JsonResponse(l.data, safe=False)
+
+
+def stratedy_classification(request):
+    """创建策略类别"""
+    pass
+
