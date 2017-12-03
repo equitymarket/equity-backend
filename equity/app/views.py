@@ -1,3 +1,5 @@
+#-*- coding:utf-8 -*-
+
 from django.http import *
 from .models import *
 from equity.config import wechat
