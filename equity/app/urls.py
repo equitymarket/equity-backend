@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import api
-from app import views
+import views
 from django.conf.urls import url, include
 
 urlpatterns = [
