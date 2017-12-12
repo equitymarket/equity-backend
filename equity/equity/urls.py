@@ -21,8 +21,9 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^index/', views.index),
-    url(r'^api-token-auth/', token_views.obtain_auth_token),
+    # url(r'^api-token-auth/', token_views.obtain_auth_token),
     # url(r'^hello/', views.hello_world),
     # url(r'^accounts/login', auth_views.login),
     url(r'^api/', include('app.urls')),
 ]
+

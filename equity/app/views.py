@@ -1,9 +1,14 @@
+from django.contrib.auth.models import User
 from django.http import *
-from .models import *
+# from .models import *
+from app.models import Strategy, StrategySerializer, BuyRecord, BuyRecordSerializer, Trade, TradeSerializer, DealType, \
+    DealTypeSerializer
+from app.serializers import UserSerializer
 from equity.config import wechat
 import requests
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
 
 
 # 微信授权相关
@@ -64,20 +69,53 @@ def test_login(request):
     return JsonResponse({'success': True, 'msg': '登陆页'})
 
 
-def permissions_list(request):
-    """权限列表"""
-    l = PermissionSerializer(Permission.objects.all(), many=True)
-    return JsonResponse(l.data, safe=False)
+# def permissions_list(request):
+#     """权限列表"""
+#     l = PermissionSerializer(Permission.objects.all(), many=True)
+#     return JsonResponse(l.data, safe=False)
 
 
-def users_list(request):
-    """用户列表"""
-    users = User.objects.all()
-    l = UserSerializer(User.objects.all(), many=True)
-    return JsonResponse(l.data, safe=False)
+# def users_list(request):
+#     """用户列表"""
+#     users = User.objects.all()
+#     l = UserSerializer(User.objects.all(), many=True)
+#     return JsonResponse(l.data, safe=False)
 
 
-def stratedy_classification(request):
+def strategy_classification(request):
     """创建策略类别"""
     pass
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class StrategyVeiwSet(viewsets.ModelViewSet):
+    """策略资源"""
+    queryset = Strategy.objects.all().order_by('-created')
+    serializer_class = StrategySerializer
+
+
+class BuyRecordsViewSet(viewsets.ModelViewSet):
+    """购买记录"""
+    queryset = BuyRecord.objects.all().order_by('-created')
+    serializer_class = BuyRecordSerializer
+
+
+class TradeVeiwSet(viewsets.ModelViewSet):
+    """交易记录"""
+    queryset = Trade.objects.all().order_by('-created')
+    serializer_class = TradeSerializer
+
+
+class DealTypeViewSet(viewsets.ModelViewSet):
+    """交易类型"""
+    queryset = DealType.objects.all()
+    serializer_class = DealTypeSerializer
+
 

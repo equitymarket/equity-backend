@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework.authtoken',
+    'rest_framework',
+    # 'rest_framework.authtoken',
     'app',
 ]
 
@@ -124,10 +125,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'PAGE_SIZE': 10
+
 }
-AUTHENTICATION_BACKENDS = (
 
-    'app.auth.MyCustomBackend',
 
-)
+# AUTHENTICATION_BACKENDS = (
+#
+#     'app.auth.MyCustomBackend',
+#
+# )
