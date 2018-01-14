@@ -131,6 +131,13 @@ class StrategySerializer(serializers.ModelSerializer):
                   'maxwithdraw', 'totalreturn', 'todayreturn', 'strategyclassification', 'users')
 
 
+class StrategySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stratedy
+        fields = ('id', 'name', 'created','updated', 'price','pricipal',
+                 'level','subscription','purchase','maxwithdraw','totalreturn', 'todayreturn', 'stratedyclassification','users')
+
+
 class BuyRecord(models.Model):
     """交易策略购买记录，包含未购买"""
     user = models.ForeignKey(to=User)
