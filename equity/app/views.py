@@ -1,15 +1,18 @@
 # -*- coding:utf-8 -*-
 
+import requests
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.http import *
+from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from app.models import *
 from app.serializers import UserSerializer
 from equity.config import wechat
-import requests
-from django.core.cache import cache
-from django.contrib.auth.decorators import login_required
-from rest_framework import viewsets
-from rest_framework.decorators import api_view
+from .serializers import StrategySerializer
 
 
 @api_view(['POST'])
@@ -184,9 +187,6 @@ def get_strategies(request):
     return JsonResponse({'status': '0', 'msg': 'success', 'data': strategies})
 
 
-
-
-
 # 微信授权相关
 def wechat_login(request):
     """微信授权登陆"""
@@ -288,3 +288,35 @@ class DealTypeViewSet(viewsets.ModelViewSet):
     """交易类型"""
     queryset = DealType.objects.all()
     serializer_class = DealTypeSerializer
+
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+
+
+@api_view(['GET'])
+def strategy_list(request):
+    """
+    list all strategy，return all information
+    """
+    output = Strategy.objects.all()
+    serializer = StrategySerializer(output, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def strategy_totolreturn(request):
+    """list all strategy，return base information,filted by totolreturn"""
+    output = Strategy.objects.values("name", "price", "maxwithdraw", "totalreturn", "todayreturn", ).order_by(
+        "-totalreturn")
+    serializer = StrategySerializer(output, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def strategy_maxwithdraw(request):
+    """list all strategy，return base information,filted by maxwithdraw"""
+    output = Strategy.objects.values("name", "price", "maxwithdraw", "totalreturn", "todayreturn", ).order_by(
+        "-maxwithdraw")
+    serializer = StrategySerializer(output, many=True)
+    return Response(serializer.data)

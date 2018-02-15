@@ -1,10 +1,11 @@
 # -*- coding:utf-8 -*-
 
-from app import api
-from app import views
-from django.conf.urls import url, include
-
+from django.conf.urls import include
+from django.conf.urls import url
 from rest_framework import routers
+
+from app import api
+from . import views
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -47,4 +48,11 @@ urlpatterns = [
     url(r'strategy/maxwithdraw$', api.strategy_maxwithdraw, name='strategy_maxwithdraw'),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]
+
+
+urlpatterns = [
+    url(r'strategy/list/$', views.strategy_list, name='strategy_list'),
+    url(r'strategy/totolreturn$', views.strategy_totolreturn, name='strategy_totolreturn'),
+    url(r'strategy/maxwithdraw$', views.strategy_maxwithdraw, name='strategy_maxwithdraw'),
 ]

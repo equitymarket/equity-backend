@@ -1,8 +1,9 @@
 # -*- coding:utf-8 -*-
 
 import hashlib
-from rest_framework import serializers
+
 from django.db import models
+from rest_framework import serializers
 
 
 class AppUser(models.Model):
@@ -102,26 +103,6 @@ class MytradeSerializer(serializers.ModelSerializer):
         fields = ('appuser', 'code', 'direction', 'created', 'price', 'volume', 'dealtype')
 
 
-class Strategy(models.Model):
-    """交易策略表"""
-    name = models.CharField(max_length=30, unique=True)  # 交易策略名称
-    price = models.DecimalField(max_digits=10, decimal_places=3)  # 用户购买策略的单价
-    principal = models.DecimalField(max_digits=10, decimal_places=3)  # 本金
-    created = models.DateField(auto_now_add=True)  # 创建时间
-    updated = models.DateField(auto_now_add=True)  # 更新时间
-    level = models.IntegerField(default=1)  # 1-初级免费 2-中级  。。。 待完善
-    subscription = models.IntegerField(default=0)  # 订阅量
-    purchase = models.IntegerField(default=0)  # 购买量
-    maxwithdraw = models.DecimalField(max_digits=10, decimal_places=3)  # 最大回撤
-    totalreturn = models.DecimalField(max_digits=10, decimal_places=3)  # 累计收益
-    todayreturn = models.DecimalField(max_digits=10, decimal_places=3)  # 今日收益
-    strategyclassification = models.ForeignKey(to='StrategyClassification')  # 策略类别
-    appusers = models.ManyToManyField(AppUser, through='BuyRecord')  # 购买的用户
-
-    def __str__(self):
-        return self.name
-
-
 class StrategySerializer(serializers.ModelSerializer):
     class Meta:
         model = Strategy
@@ -203,3 +184,22 @@ class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
         fields = ('name', 'code')
+
+
+class Strategy(models.Model):
+    name = models.CharField('策略名称', max_length=50)
+    price = models.DecimalField('成交价', max_digits=12, decimal_places=2, null=True)
+    pricipal = models.DecimalField('本金', max_digits=12, decimal_places=2, null=True)
+    created = models.DateField('创建时间', auto_now_add=True)
+    updated = models.DateTimeField('更新时间', auto_now=True)
+    level = models.IntegerField('策略级别', default=1)
+    subscription = models.IntegerField('订阅数量', default=0)
+    purchase = models.IntegerField('购买量', default=0)
+    maxwithdraw = models.DecimalField('最大回撤,百分比率', max_digits=5, decimal_places=4, null=True)
+    totalreturn = models.DecimalField('累计收益，百分比率', max_digits=5, decimal_places=4, null=True)
+    todayreturn = models.DecimalField('今日收益，百分比率', max_digits=5, decimal_places=4, null=True)
+    classification = models.IntegerField('策略类别', default=1)
+    appusers = models.ManyToManyField(AppUser, through='BuyRecord')  # 购买的用户
+
+    def __str__(self):
+        return self.name
