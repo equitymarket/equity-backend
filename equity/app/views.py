@@ -1,16 +1,190 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 from django.contrib.auth.models import User
 from django.http import *
-# from .models import *
-from app.models import Strategy, StrategySerializer, BuyRecord, BuyRecordSerializer, Trade, TradeSerializer, DealType, \
-    DealTypeSerializer
+from app.models import *
 from app.serializers import UserSerializer
 from equity.config import wechat
 import requests
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+
+
+@api_view(['POST'])
+def create_user(request):
+    print(request.data)
+    # todo: create user
+    # user = AppUser(request.data)
+    # user.save()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def update_user(request):
+    print(request.data)
+    # todo: update user
+    # AppUser.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def delete_user(request):
+    print(request.data)
+    # todo: delete user
+    # AppUser.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['GET'])
+def get_user_detail(request, user_id):
+    print(user_id)
+    # todo: get user detail
+    detail = {}
+    # detail = AppUser.objects.get(user_id)
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': detail})
+
+
+@api_view(['GET'])
+def get_users(request):
+    # todo: get user list by filter
+    qs = request.query_params
+    # AppUser.objects.find()
+    users = [{}, {}]
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': users})
+
+
+@api_view(['POST'])
+def create_permission(request):
+    print(request.data)
+    # todo: create permission
+    # user = AppUser(request.data)
+    # user.save()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def update_permission(request):
+    print(request.data)
+    # todo: update permission
+    # AppUser.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def delete_permission(request):
+    print(request.data)
+    # todo: delete permission
+    # AppUser.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['GET'])
+def get_permission_detail(request, permission_id):
+    print(permission_id)
+    # todo: get permission detail
+    detail = {}
+    # detail = AppUser.objects.get(user_id)
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': detail})
+
+
+@api_view(['GET'])
+def get_permissions(request):
+    # todo: get permission list by filter
+    qs = request.query_params
+    # AppUser.objects.find()
+    permissions = [{}, {}]
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': permissions})
+
+
+@api_view(['POST'])
+def create_role(request):
+    print(request.data)
+    # todo: create role
+    # role = Role(request.data)
+    # role.save()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def update_role(request):
+    print(request.data)
+    # todo: update role
+    # AppUser.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def delete_role(request):
+    print(request.data)
+    # todo: delete role
+    # AppUser.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['GET'])
+def get_role_detail(request, role_id):
+    print(role_id)
+    # todo: get permission detail
+    detail = {}
+    # detail = AppUser.objects.get(user_id)
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': detail})
+
+
+@api_view(['GET'])
+def get_roles(request):
+    # todo: get role list by filter
+    qs = request.query_params
+    # AppUser.objects.find()
+    roles = [{}, {}]
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': roles})
+
+
+@api_view(['POST'])
+def create_strategy(request):
+    print(request.data)
+    # todo: create strategy
+    # strategy = Strategy(request.data)
+    # strategy.save()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def update_strategy(request):
+    print(request.data)
+    # todo: update strategy
+    # Strategy.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['POST'])
+def delete_strategy(request):
+    print(request.data)
+    # todo: delete strategy
+    # AppUser.objects.update()
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': request.data})
+
+
+@api_view(['GET'])
+def get_strategy_detail(request, role_id):
+    print(role_id)
+    # todo: get strategy detail
+    detail = {}
+    # detail = AppUser.objects.get(user_id)
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': detail})
+
+
+@api_view(['GET'])
+def get_strategies(request):
+    # todo: get strategy list by filter
+    qs = request.query_params
+    # AppUser.objects.find()
+    strategies = [{}, {}]
+    return JsonResponse({'status': '0', 'msg': 'success', 'data': strategies})
+
+
+
 
 
 # 微信授权相关
@@ -58,17 +232,12 @@ def wechat_login(request):
 
 
 @login_required(login_url='/accounts/login')
-def hello_world(request):
+def login(request):
     data = {
         'a': 1,
         'b': 2,
     }
     return JsonResponse(data)
-
-
-def test_login(request):
-    """用户登陆"""
-    return JsonResponse({'success': True, 'msg': '登陆页'})
 
 
 # def permissions_list(request):
@@ -89,7 +258,7 @@ def strategy_classification(request):
     pass
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class AppUserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -119,5 +288,3 @@ class DealTypeViewSet(viewsets.ModelViewSet):
     """交易类型"""
     queryset = DealType.objects.all()
     serializer_class = DealTypeSerializer
-
-

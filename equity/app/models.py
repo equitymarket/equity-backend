@@ -2,12 +2,10 @@
 
 import hashlib
 from rest_framework import serializers
-
 from django.db import models
 
 
-# Create your models here.
-class User(models.Model):
+class AppUser(models.Model):
     """用户表"""
     name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
@@ -43,9 +41,9 @@ class User(models.Model):
         return False
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AppUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = AppUser
         fields = ('name', 'password', 'mobile', 'wechat', 'alipay', 'rank', 'points', 'invitecode', 'role',
                   'openid', 'unionid', 'officialaccount', 'refresh_token')
 
@@ -85,7 +83,7 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 class Mytrade(models.Model):
     """用户自主交易记录表"""
-    user = models.ForeignKey(to='User')
+    appuser = models.ForeignKey(to='AppUser')
     code = models.CharField(max_length=10, null=True)  # 股票代码
     direction = models.IntegerField(default=1)  # 交易方向 1-买入 2-卖出
     created = models.DateField(auto_now_add=True)  # 创建时间
@@ -101,7 +99,7 @@ class Mytrade(models.Model):
 class MytradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mytrade
-        fields = ('user', 'code', 'direction', 'created', 'price', 'volume', 'dealtype')
+        fields = ('appuser', 'code', 'direction', 'created', 'price', 'volume', 'dealtype')
 
 
 class Strategy(models.Model):
@@ -118,7 +116,7 @@ class Strategy(models.Model):
     totalreturn = models.DecimalField(max_digits=10, decimal_places=3)  # 累计收益
     todayreturn = models.DecimalField(max_digits=10, decimal_places=3)  # 今日收益
     strategyclassification = models.ForeignKey(to='StrategyClassification')  # 策略类别
-    users = models.ManyToManyField(User, through='BuyRecord')  # 购买的用户
+    appusers = models.ManyToManyField(AppUser, through='BuyRecord')  # 购买的用户
 
     def __str__(self):
         return self.name
@@ -128,32 +126,25 @@ class StrategySerializer(serializers.ModelSerializer):
     class Meta:
         model = Strategy
         fields = ('name', 'price', 'principal', 'created', 'updated', 'level', 'subscription', 'purchase',
-                  'maxwithdraw', 'totalreturn', 'todayreturn', 'strategyclassification', 'users')
-
-
-class StrategySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Stratedy
-        fields = ('id', 'name', 'created','updated', 'price','pricipal',
-                 'level','subscription','purchase','maxwithdraw','totalreturn', 'todayreturn', 'stratedyclassification','users')
+                  'maxwithdraw', 'totalreturn', 'todayreturn', 'strategyclassification', 'appusers')
 
 
 class BuyRecord(models.Model):
     """交易策略购买记录，包含未购买"""
-    user = models.ForeignKey(to=User)
+    appuser = models.ForeignKey(to=AppUser)
     strategy = models.ForeignKey(to=Strategy)
     status = models.IntegerField(default=1)  # 购买状态 1-已购买 2-已加入购物车
     created = models.DateField(auto_now_add=True)  # 创建时间
     updated = models.DateField(auto_now_add=True)  # 更新时间
 
     def __str__(self):
-        return self.user + ':' + self.strategy
+        return self.appuser + ':' + self.strategy
 
 
 class BuyRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyRecord
-        fields = ('user', 'strategy', 'status', 'created')
+        fields = ('appuser', 'strategy', 'status', 'created')
 
 
 class StrategyClassification(models.Model):
@@ -169,7 +160,7 @@ class StrategyClassification(models.Model):
 class StrategyClassificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyRecord
-        fields = ('user', 'strategy', 'status', 'created')
+        fields = ('appuser', 'strategy', 'status', 'created')
 
 
 class Trade(models.Model):
